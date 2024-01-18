@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{type}} Page</h1>
+{%load crispy_forms_tags %}  
+<form style = "width: 50% ; margin: auto;" method='post' novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}
+  {% for er in form.non_field_errors %}
+    <p class="bg-danger text-white p-3">{{er}} </p>
+  {% endfor %}
+  {% endif %}
+  <!--{{ form | crispy }} -->
+  {% for fm in form %}
+  {{fm.label_tag}}
+  {{fm}}
+  {{fm.errors | striptags}}
+  {% endfor %}
+  <br/>
+
+  <button type="submit" class="btn btn-primary">submit</button>
+</form>
+
+{% endblock %}

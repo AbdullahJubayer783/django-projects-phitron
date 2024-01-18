@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %} 
+<h1>Profile Page of {{user}}</h1>
+{%load crispy_forms_tags %}  
+<form style = "width: 50% ; margin: auto;" method='post' novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}
+  {% for er in form.non_field_errors %}
+    <p class="bg-danger text-white p-3">{{er}} </p>
+  {% endfor %}
+  {% endif %}
+  <!--{{ form | crispy }} -->
+  {% for fm in form %}
+  {{fm.label_tag}}
+  {{fm}}
+  {{fm.errors | striptags}}
+  {% endfor %}
+  <br/>
+
+  <button type="submit" class="btn btn-primary">Change</button>
+</form>
+<h1>Borrowed Books:</h1>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Book Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Date</th>
+      <th scope="col">Balance After Borrow</th>
+      <th scope="col">Return Book</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for obj in objects %}
+    <tr>
+      <th scope="row">{{obj.book.id}}</th>
+      <td>{{obj.book.title}}</td>
+      <td>{{obj.book.borrowprice}}</td>
+      <td>{{obj.created_time}}</td>
+      <td>{{obj.book.balance_after_transaction}}</td>
+      <td><a class="btn btn-danger text-white" href="{% url "return" obj.book.id %}">Return</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock  %}
